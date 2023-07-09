@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AppLexema from './Analex';
+import Interfaz from './Analex';
+import Lexema from './Lexema';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AppLexema />
+    <Lexema />
   </React.StrictMode>
 );
 
