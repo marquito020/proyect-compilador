@@ -411,7 +411,7 @@ class Analex {
             this.M.avanzar();
             this.M.avanzar();
           } else {
-            if (c === "\n" || c === this.M.EOF) {
+            if (c === this.M.EOF) {
               this.R.set(Token.ERROR, -1);
               return;
             } else {
