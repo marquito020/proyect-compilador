@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 
 // Clase Cinta
 class Cinta {
@@ -270,6 +270,7 @@ class Analex {
             this.M.avanzar();
             continue;
           } else if (c === this.M.EOF) {
+            /* console.log("EOF"); */
             this.R.set(Token.FIN, -1);
             return;
           } else if (c === "/" && this.M.cc(1) === "/") {
@@ -605,135 +606,148 @@ class Analex {
 
 // Componente App
 const Lexema = () => {
-    const [programa, setPrograma] = useState("");
-    const [tokens, setTokens] = useState([]);
-    const [lexemas, setLexema] = useState([]);
-    const [lexemaActual, setLexemaActual] = useState(0);
-  
-    const analizarPrograma = () => {
-      const lexemas = [];
-      const cinta = new Cinta(programa + " ");
-      const analex = new Analex(cinta);
-      const tokens = [];
-      analex.init();
-  
-      while (analex.Preanalisis().getNom() !== Token.FIN) {
-        const token = analex.Preanalisis();
-        const lexema = analex.lexema();
-        console.log(token.toString());
-        console.log(lexema);
-        tokens.push(token.toString());
-        lexemas.push(lexema);
-        analex.avanzar();
-      }
-  
-      setTokens(tokens);
-      setLexema(lexemas);
-      setLexemaActual(0);
-    };
-  
-    const avanzarLexema = () => {
-      if (lexemaActual < lexemas.length - 1) {
-        setLexemaActual(lexemaActual + 1);
-      }
-    };
-  
-    return (
-      <div className="lexema-container">
-        
-        <h1>ANALIZADOR LÉXICO PARA EL LENGUAJE GRM123</h1>
-        <h2>Autor: Marco Toledo</h2>
-  
-        <textarea
-          value={programa}
-          onChange={(e) => setPrograma(e.target.value)}
-          rows={10}
-          cols={50}
-          placeholder="Ingresa el programa..."
-        ></textarea>
-        <br />
-        <button onClick={analizarPrograma}>Iniciar</button>
-        <button onClick={avanzarLexema} disabled={lexemas.length === 0 || lexemaActual === lexemas.length - 1}>
-          Avanzar
-        </button>
-        <br />
-        <br />
-        <table>
-          <thead>
-            <tr>
-              <th>Token</th>
-              <th>Lexema</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{tokens[lexemaActual]}</td>
-              <td>{lexemas[lexemaActual]}</td>
-            </tr>
-          </tbody>
-        </table>
-  
-        <style jsx>{`
-          .lexema-container {
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f8f8f8;
-          }
-  
-          h1 {
-            margin-bottom: 10px;
-          }
-  
-          h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            color: #555;
-          }
-  
-          textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-          }
-  
-          button {
-            padding: 10px 20px;
-            margin-right: 10px;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-          }
-  
-          button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-          }
-  
-          table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-  
-          th,
-          td {
-            padding: 8px;
-            border: 1px solid #ccc;
-          }
-  
-          th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-          }
-        `}</style>
-      </div>
-    );
+  const [programa, setPrograma] = useState("");
+  const [tokens, setTokens] = useState([]);
+  const [lexemas, setLexema] = useState([]);
+  const [lexemaActual, setLexemaActual] = useState(0);
+
+  const analizarPrograma = () => {
+    const lexemas = [];
+    const cinta = new Cinta(programa + " ");
+    const analex = new Analex(cinta);
+    const tokens = [];
+    analex.init();
+
+    while (analex.Preanalisis().getNom()) {
+      const token = analex.Preanalisis();
+      const lexema = analex.lexema();
+      console.log(token.toString());
+      console.log(lexema);
+      tokens.push(token.toString());
+      lexemas.push(lexema);
+      analex.avanzar();
+      console.log(analex.Preanalisis().getNom());
+    }
+
+    if (analex.Preanalisis().getNom() === 0) {
+      const token = analex.Preanalisis();
+      console.log(token.toString());
+      tokens.push(token.toString());
+      analex.avanzar();
+      console.log(analex.Preanalisis().getNom());
+    }
+
+    setTokens(tokens);
+    setLexema(lexemas);
+    setLexemaActual(0);
+
+    console.log(tokens);
   };
-  
-  export default Lexema;
+
+  const avanzarLexema = () => {
+    if (lexemaActual < lexemas.length ) {
+      setLexemaActual(lexemaActual + 1);
+    }
+  };
+
+  return (
+    <div className="lexema-container">
+      <h1>ANALIZADOR LÉXICO PARA EL LENGUAJE GRM123</h1>
+      <h2>Autor: Marco Toledo</h2>
+
+      <textarea
+        value={programa}
+        onChange={(e) => setPrograma(e.target.value)}
+        rows={10}
+        cols={50}
+        placeholder="Ingresa el programa..."
+      ></textarea>
+      <br />
+      <button onClick={analizarPrograma}>Iniciar</button>
+      <button
+        onClick={avanzarLexema}
+        disabled={lexemas.length === 0 || lexemaActual === lexemas.length }
+      >
+        Avanzar
+      </button>
+      <br />
+      <br />
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Lexema</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{tokens[lexemaActual]}</td>
+            <td>{lexemas[lexemaActual]}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <style jsx>{`
+        .lexema-container {
+          width: 100%;
+          padding: 20px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          background-color: #f8f8f8;
+        }
+
+        h1 {
+          margin-bottom: 10px;
+        }
+
+        h2 {
+          margin-top: 0;
+          margin-bottom: 20px;
+          font-size: 1.2em;
+          color: #555;
+        }
+
+        textarea {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+
+        button {
+          padding: 10px 20px;
+          margin-right: 10px;
+          background-color: #4caf50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+
+        th,
+        td {
+          padding: 8px;
+          border: 1px solid #ccc;
+        }
+
+        th {
+          background-color: #f2f2f2;
+          font-weight: bold;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default Lexema;
